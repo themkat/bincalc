@@ -75,6 +75,7 @@ name = "bincalc"
 version = "0.1.0"
 dependencies = [
  "leptos",
+ "paste",
  "radix_fmt",
 ]
 

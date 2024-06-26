@@ -5,4 +5,5 @@ edition = "2021"
 
 [dependencies]
 leptos = { version = "0.6.12", features = ["csr"] }
+paste = "1.0.15"
 radix_fmt = "1.0.0"
