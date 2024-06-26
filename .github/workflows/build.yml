@@ -23,6 +23,9 @@ jobs:
       # - name: Run clippy to check for possible errors
       #   run: |
       #     cargo clippy --all -- -D warnings
+      - name: Build
+        run: |
+          trunk build
       - name: Run tests
         run: |
           cargo test
