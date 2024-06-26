@@ -1,0 +1,1 @@
+* BinCalc - Simple Leptos Rust calculator application
