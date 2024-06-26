@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: clippy, rustfmt
+      - name: Set up Trunk for WASM compile
+        run: |
+          cargo install trunk --locked
+      - name: Check formatting
+        run: |
+          cargo fmt -- --check
+      # - name: Run clippy to check for possible errors
+      #   run: |
+      #     cargo clippy --all -- -D warnings
+      - name: Run tests
+        run: |
+          cargo test
