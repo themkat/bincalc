@@ -18,9 +18,12 @@ jobs:
       - name: Set up Trunk for WASM compile
         run: |
           cargo install trunk --locked
+      - name: Set up leptosfmt for inline HTML formatting
+        run: |
+          cargo install leptosfmt --locked
       - name: Check formatting
         run: |
-          cargo fmt -- --check
+          leptosfmt --check ./**/*.rs
       # - name: Run clippy to check for possible errors
       #   run: |
       #     cargo clippy --all -- -D warnings
