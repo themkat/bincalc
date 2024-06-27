@@ -12,7 +12,7 @@ pub fn App() -> impl IntoView {
     let (valid, set_valid) = create_signal(true);
 
     view! {
-        <div class="mx-auto w-[80vw]">
+        <div class="mx-auto w-[80vw] flex flex-col items-center ">
             <BaseSelector
                 selected_bases=move |_| {
                     let mut result = vec![base.get()];
@@ -33,6 +33,7 @@ pub fn App() -> impl IntoView {
             />
             <input
                 type="text"
+                class="border-dashed border-2"
                 prop:value=input
                 on:input=move |ev| {
                     let number = event_target_value(&ev);
@@ -64,7 +65,7 @@ fn OutputList(#[prop(into)] number: Callback<NothingNess, u32>) -> impl IntoView
                 key=move |base| format!("{}-{}", number.call(NothingNess {}), base)
                 children=move |base| {
                     view! {
-                        <li>
+                        <li class="hover:outline">
                             {base_name(base)} ": "
                             {format!("{:#}", radix(number.call(NothingNess {}), base as u8))}
                         </li>
@@ -88,48 +89,59 @@ fn OutputList(#[prop(into)] number: Callback<NothingNess, u32>) -> impl IntoView
     }
 }
 
+// TODO: bug if you select something, then click add twice... Then it fucks up state...
 #[component]
 fn BaseSelector(
     #[prop(into)] selected_bases: Callback<NothingNess, Vec<u32>>,
     #[prop(into)] on_selected: Callback<u32>,
     callback_on_btn: bool,
+    #[prop(default = "flex items-center py-1.5".to_string())] class: String,
 ) -> impl IntoView {
     let (base, set_base) = create_signal(3_u32);
 
     view! {
-        <select
-            name="Base"
-            on:change=move |ev| {
-                let new_base = event_target_value(&ev).parse().unwrap();
-                set_base.set(new_base);
-                if !callback_on_btn {
-                    on_selected.call(new_base);
+        <div class=class>
+            <select
+                name="Base"
+                class="border-solid border-2 rounded-lg"
+                on:change=move |ev| {
+                    let new_base = event_target_value(&ev).parse().unwrap();
+                    set_base.set(new_base);
+                    if !callback_on_btn {
+                        on_selected.call(new_base);
+                    }
                 }
-            }
 
-            prop:value=move || base.get().to_string()
-        >
-            <For
-                each=move || selected_bases.call(NothingNess {})
-                key=|base| base.clone()
-                children=move |base| {
-                    view! { <option value=base>{base_name(base)}</option> }
-                }
-            />
+                prop:value=move || base.get().to_string()
+            >
+                <For
+                    each=move || selected_bases.call(NothingNess {})
+                    key=|base| base.clone()
+                    children=move |base| {
+                        view! { <option value=base>{base_name(base)}</option> }
+                    }
+                />
 
-        </select>
-        {move || {
-            if callback_on_btn {
-                view! {
-                    <button on:click=move |_| {
-                        on_selected.call(base.get());
-                    }>"Add"</button>
+            </select>
+            {move || {
+                if callback_on_btn {
+                    view! {
+                        <button
+                            class="border-solid border-2 rounded-lg px-1 mx-1.5"
+                            on:click=move |_| {
+                                on_selected.call(base.get());
+                            }
+                        >
+                            "Add"
+                        </button>
+                    }
+                        .into_any()
+                } else {
+                    view! { <p></p> }.into_any()
                 }
-                    .into_any()
-            } else {
-                view! { <p></p> }.into_any()
-            }
-        }}
+            }}
+
+        </div>
     }
 }
 
