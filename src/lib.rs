@@ -132,6 +132,7 @@ fn BaseSelector(
                                 on_selected.call(base.get());
                             }
                         >
+
                             "Add"
                         </button>
                     }
