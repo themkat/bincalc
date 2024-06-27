@@ -1,11 +1,7 @@
 use leptos::{
-    component, create_signal, event_target_value, view, Callable, Callback, For, IntoView,
-    ReadSignal, SignalGet, SignalSet,
+    component, create_signal, event_target_value, view, Callable, Callback, For, IntoView, SignalGet, SignalSet
 };
 use radix_fmt::radix;
-
-// TODO: might be useful to limit the input somehow? hex numbers suddenly get big in binary lol :smile:
-//       would be fun to find a general way to calculate a number like that :D
 
 // TODO: maybe some sort of sorting could be user friendly?
 
@@ -16,15 +12,36 @@ pub fn App() -> impl IntoView {
     let (valid, set_valid) = create_signal(true);
 
     view! {
-        <input type="text"
+        <BaseSelector
+            selected_bases=move |_| {
+                let mut result = vec![base.get()];
+                result
+                    .extend(
+                        (2_u32..=32_u32).filter(|elem| base.get() != *elem).collect::<Vec<u32>>(),
+                    );
+                result
+            }
+
+            on_selected=move |selected_base| {
+                set_base.set(selected_base);
+            }
+
+            callback_on_btn=false
+        />
+        <input
+            type="text"
             prop:value=input
             on:input=move |ev| {
                 let number = event_target_value(&ev);
                 set_input.set(number.clone());
                 set_valid.set(number_is_valid(number, base.get()));
-            } />
+            }
+        />
+
         <label>"Valid: " {valid}</label>
-        <OutputList number=move |_| u32::from_str_radix(input.get().as_str(), base.get()).unwrap_or(0) />
+        <OutputList number=move |_| {
+            u32::from_str_radix(input.get().as_str(), base.get()).unwrap_or(0)
+        }/>
     }
 }
 
@@ -38,48 +55,77 @@ fn OutputList(#[prop(into)] number: Callback<NothingNess, u32>) -> impl IntoView
 
     view! {
         <ul>
-            <For each=move || selected_bases.get()
-            key=move |base| format!("{}-{}", number.call(NothingNess {}), base)
-            children=move |base| {
-                view! {
-                    <li>{base_name(base)} ": " {format!("{:#}", radix(number.call(NothingNess {}), base as u8))}</li>
+            <For
+                each=move || selected_bases.get()
+                key=move |base| format!("{}-{}", number.call(NothingNess {}), base)
+                children=move |base| {
+                    view! {
+                        <li>
+                            {base_name(base)} ": "
+                            {format!("{:#}", radix(number.call(NothingNess {}), base as u8))}
+                        </li>
+                    }
                 }
-            }/>
+            />
+
         </ul>
-        <BaseSelector selected_bases=selected_bases
+        <BaseSelector
+            selected_bases=move |_| {
+                (2..=32).filter(|base| !selected_bases.get().contains(base)).collect::<Vec<u32>>()
+            }
+
             on_selected=move |base| {
-                set_selected_bases.set(selected_bases.get().into_iter().chain(vec![base].into_iter()).collect())
-            }/>
+                set_selected_bases
+                    .set(selected_bases.get().into_iter().chain(vec![base].into_iter()).collect())
+            }
+
+            callback_on_btn=true
+        />
     }
 }
 
 #[component]
 fn BaseSelector(
-    selected_bases: ReadSignal<Vec<u32>>,
+    #[prop(into)] selected_bases: Callback<NothingNess, Vec<u32>>,
     #[prop(into)] on_selected: Callback<u32>,
+    callback_on_btn: bool,
 ) -> impl IntoView {
     let (base, set_base) = create_signal(3_u32);
 
     view! {
-        <select name="Base" on:change=move |ev| {
-            set_base.set(event_target_value(&ev).parse().unwrap());
-        }
-                prop:value=move || base.get().to_string()
-        >
-            <For each=move || {
-                (2..=32).filter(|base| !selected_bases.get().contains(base)).collect::<Vec<u32>>()
+        <select
+            name="Base"
+            on:change=move |ev| {
+                let new_base = event_target_value(&ev).parse().unwrap();
+                set_base.set(new_base);
+                if !callback_on_btn {
+                    on_selected.call(new_base);
+                }
             }
-                 key=|base| base.clone()
-                 children=move |base| {
-                     view! {
-                         <option value=base>{base_name(base)}</option>
-                     }
-                 }
-             />
+
+            prop:value=move || base.get().to_string()
+        >
+            <For
+                each=move || selected_bases.call(NothingNess {})
+                key=|base| base.clone()
+                children=move |base| {
+                    view! { <option value=base>{base_name(base)}</option> }
+                }
+            />
+
         </select>
-        <button on:click=move |_| {
-            on_selected.call(base.get());
-        }>"Add"</button>
+        {move || {
+            if callback_on_btn {
+                view! {
+                    <button on:click=move |_| {
+                        on_selected.call(base.get());
+                    }>"Add"</button>
+                }
+                    .into_any()
+            } else {
+                view! { <p></p> }.into_any()
+            }
+        }}
     }
 }
 
