@@ -92,7 +92,7 @@ fn base_name(base: u32) -> Option<String> {
         2 => Some("Binary".to_string()),
         8 => Some("Octal".to_string()),
         10 => Some("Decimal".to_string()),
-        // TODO: 12 (Duodecimal)?
+        12 => Some("Duodecimal".to_string()),
         16 => Some("Hexadecimal".to_string()),
         2..=32 => Some(format!("Base{base}")),
         _ => None,
@@ -121,6 +121,7 @@ mod tests {
         base_name_test!(Binary with base 2);
         base_name_test!(Octal with base 8);
         base_name_test!(Decimal with base 10);
+        base_name_test!(Duodecimal with base 12);
         base_name_test!(Hexadecimal with base 16);
         base_name_test!(Base3 with base 3);
         base_name_test!(Base32 with base 32);
