@@ -34,9 +34,25 @@ jobs:
       - name: Generate Tailwind CSS output file
         run: |
           tailwindcss --input input.css --output style/output.css --minify
-      - name: Build
-        run: |
-          trunk build
       - name: Run tests
         run: |
           cargo test
+      - name: Build
+        run: |
+          trunk build --minify --release
+      - name: Upload website to Github Pages artifact repo
+        if: github.ref == 'refs/heads/main'
+        uses: actions/pages-upload-artifact@v3
+        with:
+          path: "dist"
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
