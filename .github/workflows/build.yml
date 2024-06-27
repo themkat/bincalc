@@ -27,6 +27,9 @@ jobs:
       # - name: Run clippy to check for possible errors
       #   run: |
       #     cargo clippy --all -- -D warnings
+      - name: Generate Tailwind CSS output file
+        run: |
+          tailwindcss --input input.css --output style/output.css --minify
       - name: Build
         run: |
           trunk build

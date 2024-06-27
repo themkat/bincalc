@@ -12,36 +12,40 @@ pub fn App() -> impl IntoView {
     let (valid, set_valid) = create_signal(true);
 
     view! {
-        <BaseSelector
-            selected_bases=move |_| {
-                let mut result = vec![base.get()];
-                result
-                    .extend(
-                        (2_u32..=32_u32).filter(|elem| base.get() != *elem).collect::<Vec<u32>>(),
-                    );
-                result
-            }
+        <div class="mx-auto w-[80vw]">
+            <BaseSelector
+                selected_bases=move |_| {
+                    let mut result = vec![base.get()];
+                    result
+                        .extend(
+                            (2_u32..=32_u32)
+                                .filter(|elem| base.get() != *elem)
+                                .collect::<Vec<u32>>(),
+                        );
+                    result
+                }
 
-            on_selected=move |selected_base| {
-                set_base.set(selected_base);
-            }
+                on_selected=move |selected_base| {
+                    set_base.set(selected_base);
+                }
 
-            callback_on_btn=false
-        />
-        <input
-            type="text"
-            prop:value=input
-            on:input=move |ev| {
-                let number = event_target_value(&ev);
-                set_input.set(number.clone());
-                set_valid.set(number_is_valid(number, base.get()));
-            }
-        />
+                callback_on_btn=false
+            />
+            <input
+                type="text"
+                prop:value=input
+                on:input=move |ev| {
+                    let number = event_target_value(&ev);
+                    set_input.set(number.clone());
+                    set_valid.set(number_is_valid(number, base.get()));
+                }
+            />
 
-        <label>"Valid: " {valid}</label>
-        <OutputList number=move |_| {
-            u32::from_str_radix(input.get().as_str(), base.get()).unwrap_or(0)
-        }/>
+            <label>"Valid: " {valid}</label>
+            <OutputList number=move |_| {
+                u32::from_str_radix(input.get().as_str(), base.get()).unwrap_or(0)
+            }/>
+        </div>
     }
 }
 
