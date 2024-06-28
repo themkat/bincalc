@@ -12,7 +12,7 @@ pub fn App() -> impl IntoView {
     let (valid, set_valid) = create_signal(true);
 
     view! {
-        <div class="mx-auto w-[80vw] flex flex-col items-center ">
+        <div class="mx-auto sm:w-[80vw] flex flex-col items-center ">
             <BaseSelector
                 selected_bases=move |_| {
                     let mut result = vec![base.get()];
@@ -36,7 +36,7 @@ pub fn App() -> impl IntoView {
             />
             <input
                 type="text"
-                class="border-dashed border-2"
+                class="border-dashed border-2 text-right"
                 prop:value=input
                 on:input=move |ev| {
                     let number = event_target_value(&ev);
@@ -68,7 +68,7 @@ fn OutputList(#[prop(into)] number: Callback<NothingNess, u32>) -> impl IntoView
                 key=move |base| format!("{}-{}", number.call(NothingNess {}), base)
                 children=move |base| {
                     view! {
-                        <li class="hover:outline">
+                        <li class="p-1.5 hover:outline">
                             {base_name(base)} ": "
                             {format!("{:#}", radix(number.call(NothingNess {}), base as u8))}
                         </li>
@@ -98,7 +98,7 @@ fn BaseSelector(
     #[prop(into)] selected_bases: Callback<NothingNess, Vec<u32>>,
     #[prop(into)] on_selected: Callback<u32>,
     callback_on_btn: bool,
-    #[prop(default = "flex items-center py-1.5".to_string())] class: String,
+    #[prop(default = "flex items-center py-3.5".to_string())] class: String,
 ) -> impl IntoView {
     let (base, set_base) = create_signal(3_u32);
 
