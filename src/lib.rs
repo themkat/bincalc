@@ -92,7 +92,6 @@ fn OutputList(#[prop(into)] number: Callback<NothingNess, u32>) -> impl IntoView
     }
 }
 
-// TODO: bug if you select something, then click add twice... Then it fucks up state...
 #[component]
 fn BaseSelector(
     #[prop(into)] selected_bases: Callback<NothingNess, Vec<u32>>,
