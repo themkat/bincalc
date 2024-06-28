@@ -34,6 +34,7 @@ jobs:
       - name: Build
         run: |
           trunk build --minify --release
+          cp google77866018bd8e2f48.html dist/.
           cp CNAME dist/.
       - name: Upload website to Github Pages artifact repo
         if: github.ref == 'refs/heads/main'
