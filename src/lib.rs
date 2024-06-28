@@ -1,5 +1,5 @@
 use leptos::{
-    component, create_signal, event_target_value, view, Callable, Callback, For, IntoView, SignalGet, SignalSet
+    component, create_effect, create_signal, event_target_value, view, Callable, Callback, For, IntoView, SignalGet, SignalSet
 };
 use radix_fmt::radix;
 
@@ -99,6 +99,11 @@ fn BaseSelector(
 ) -> impl IntoView {
     let (base, set_base) = create_signal(3_u32);
 
+    create_effect(move |_| {
+        let bases = selected_bases.call(NothingNess {});
+        set_base.set(*bases.first().unwrap_or(&0));
+    });
+    
     view! {
         <div class=class>
             <select
