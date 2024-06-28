@@ -7,7 +7,7 @@ use radix_fmt::radix;
 
 #[component]
 pub fn App() -> impl IntoView {
-    let (input, set_input) = create_signal::<String>(String::new());
+    let (input, set_input) = create_signal("0".to_string());
     let (base, set_base) = create_signal(16);
     let (valid, set_valid) = create_signal(true);
 
@@ -25,8 +25,11 @@ pub fn App() -> impl IntoView {
                     result
                 }
 
-                on_selected=move |selected_base| {
-                    set_base.set(selected_base);
+        on_selected=move |selected_base| {
+            // crude conversion. could be preffified by making some helper funcs
+            let current_input = input.get();
+            set_input.set(format!("{:#}", radix( u32::from_str_radix(current_input.as_str(), base.get()).unwrap_or(0), selected_base as u8)));
+            set_base.set(selected_base);
                 }
 
                 callback_on_btn=false
