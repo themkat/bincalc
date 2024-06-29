@@ -3,8 +3,6 @@ use leptos::{
 };
 use radix_fmt::radix;
 
-// TODO: maybe some sort of sorting could be user friendly?
-
 #[component]
 pub fn App() -> impl IntoView {
     let (input, set_input) = create_signal("0".to_string());
@@ -65,6 +63,7 @@ pub fn App() -> impl IntoView {
                     }
                 }
             }}
+
             <OutputList number=move |_| {
                 u32::from_str_radix(input.get().as_str(), base.get()).unwrap_or(0)
             }/>
@@ -190,7 +189,6 @@ fn base_name(base: u32) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    // TODO: just verify number validity for many different numbers
 
     mod base_name {
         use crate::base_name;
