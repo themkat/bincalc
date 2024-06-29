@@ -1,1 +1,4 @@
 * BinCalc - Simple Leptos Rust calculator application
+
+
+Simple site for converting between number systems. Used to have an excuse to play with with Leptos, TailwindCSS and basic WASM compilation in Rust.
