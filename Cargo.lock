@@ -77,6 +77,8 @@ dependencies = [
  "leptos",
  "paste",
  "radix_fmt",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]

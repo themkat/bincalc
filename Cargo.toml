@@ -7,3 +7,6 @@ edition = "2021"
 leptos = { version = "0.6.12", features = ["csr"] }
 paste = "1.0.15"
 radix_fmt = "1.0.0"
+
+wasm-bindgen = "0.2"
+web-sys = "0.3"
