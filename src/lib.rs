@@ -43,7 +43,7 @@ pub fn App() -> impl IntoView {
             />
             <input
                 type="text"
-                class="border-dashed border-4 text-right text-4xl"
+                class="w-[95%] border-dashed border-4 text-right text-4xl"
                 prop:value=input
                 on:input=move |ev| {
                     let number = event_target_value(&ev);
