@@ -54,7 +54,17 @@ pub fn App() -> impl IntoView {
                 }
             />
 
-            <label>"Valid: " {valid}</label>
+            {move || {
+                if valid.get() {
+                    view! { <p class="text-xl py-3.5">"👍"</p> }
+                } else {
+                    view! {
+                        <p class="text-xl py-3.5 px-1.5 my-3.5 text-red-700 border-double border-8 border-red-700">
+                            "INVALID NUMBER"
+                        </p>
+                    }
+                }
+            }}
             <OutputList number=move |_| {
                 u32::from_str_radix(input.get().as_str(), base.get()).unwrap_or(0)
             }/>
