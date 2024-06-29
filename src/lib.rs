@@ -10,7 +10,7 @@ pub fn App() -> impl IntoView {
     let (valid, set_valid) = create_signal(true);
 
     view! {
-        <div class="mx-auto sm:w-[80vw] flex flex-col items-center ">
+        <div class="mx-auto text-xl sm:w-[80vw] flex flex-col items-center sm:border-solid sm:rounded-xl sm:border-4">
             <BaseSelector
                 selected_bases=move |_| {
                     let mut result = vec![base.get()];
@@ -54,10 +54,10 @@ pub fn App() -> impl IntoView {
 
             {move || {
                 if valid.get() {
-                    view! { <p class="text-xl py-3.5">"👍"</p> }
+                    view! { <p class="text-2xl py-3.5">"👍"</p> }
                 } else {
                     view! {
-                        <p class="text-xl py-3.5 px-1.5 my-3.5 text-red-700 border-double border-8 border-red-700">
+                        <p class="text-2xl py-3.5 px-1.5 my-3.5 text-red-700 border-double border-8 border-red-700">
                             "INVALID NUMBER"
                         </p>
                     }
