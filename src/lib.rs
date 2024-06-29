@@ -86,13 +86,21 @@ fn OutputList(#[prop(into)] number: Callback<NothingNess, u32>) -> impl IntoView
                 key=move |base| format!("{}-{}", number.call(NothingNess {}), base)
                 children=move |base| {
                     view! {
-                        <li class="p-1.5 hover:outline"
+                        <li
+                            class="p-1.5 hover:outline"
                             on:click=move |_| {
-                                // TODO: also styling. somehow make it clear to the user that this is what we are doing somehow?
-                                //       especially on phones?!? minus sign on hover does little good there :(
-                                set_selected_bases.set(selected_bases.get().into_iter().filter(|elem| base != *elem).collect::<Vec<u32>>());
-                            }>
-                            {base_name(base)} ": "
+                                set_selected_bases
+                                    .set(
+                                        selected_bases
+                                            .get()
+                                            .into_iter()
+                                            .filter(|elem| base != *elem)
+                                            .collect::<Vec<u32>>(),
+                                    );
+                            }
+                        >
+                            {base_name(base)}
+                            ": "
                             {format!("{:#}", radix(number.call(NothingNess {}), base as u8))}
                         </li>
                     }
