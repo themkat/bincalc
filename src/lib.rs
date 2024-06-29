@@ -53,8 +53,7 @@ pub fn App() -> impl IntoView {
 
                 maxlength=move || {
                     let current_base = base.get();
-                    let current_base_max = u32::MAX;
-                    format!("{:#}", radix(current_base_max, current_base as u8)).len()
+                    format!("{:#}", radix(u32::MAX, current_base as u8)).len()
                 }
             />
 
