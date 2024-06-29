@@ -50,6 +50,12 @@ pub fn App() -> impl IntoView {
                     set_input.set(number.clone());
                     set_valid.set(number_is_valid(number, base.get()));
                 }
+
+                maxlength=move || {
+                    let current_base = base.get();
+                    let current_base_max = u32::MAX;
+                    format!("{:#}", radix(current_base_max, current_base as u8)).len()
+                }
             />
 
             {move || {
