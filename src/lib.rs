@@ -43,7 +43,7 @@ pub fn App() -> impl IntoView {
             />
             <input
                 type="text"
-                class="border-dashed border-2 text-right"
+                class="border-dashed border-4 text-right text-4xl"
                 prop:value=input
                 on:input=move |ev| {
                     let number = event_target_value(&ev);
@@ -80,7 +80,7 @@ fn OutputList(#[prop(into)] number: Callback<NothingNess, u32>) -> impl IntoView
     let (selected_bases, set_selected_bases) = create_signal(vec![2, 10, 16]);
 
     view! {
-        <ul>
+        <ul class="grid grid-cols-1 divide-solid divide-y-2 py-1.5">
             <For
                 each=move || selected_bases.get()
                 key=move |base| format!("{}-{}", number.call(NothingNess {}), base)
