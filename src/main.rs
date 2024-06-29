@@ -1,5 +1,5 @@
 use bincalc::App;
-use leptos::{document, mount_to, view, IntoView, wasm_bindgen::JsCast};
+use leptos::{document, mount_to, view, wasm_bindgen::JsCast};
 
 fn main() {
     // lazy, so not error checking. know it is there lol
