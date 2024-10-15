@@ -6,6 +6,6 @@ fn main() {
     let document = document();
     let element = document.get_element_by_id("container").unwrap().unchecked_into();
     mount_to(element, || {
-        view! { <App/> }
+        view! { <App /> }
     })
 }

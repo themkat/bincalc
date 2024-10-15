@@ -71,7 +71,7 @@ pub fn App() -> impl IntoView {
 
             <OutputList number=move |_| {
                 u32::from_str_radix(input.get().as_str(), base.get()).unwrap_or(0)
-            }/>
+            } />
         </div>
     }
 }
